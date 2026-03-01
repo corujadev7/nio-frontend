@@ -274,7 +274,7 @@
         <div>
           <p class="text-sm text-nio-gray">CPF: <span id="hideCPF"></span></p>
           <h2 class="mt-1 text-xl sm:text-2xl md:text-3xl font-bold text-nio-dark">
-            Ola <span id="clientName"></span>, voce tem <span class="font-extrabold">1 conta</span> pra pagar
+            Ola <span id="clientName"></span>, voce tem <span class="font-extrabold" id="total-contas">1 </span> conta pra pagar
           </h2>
         </div>
         <button id="new-search-btn"
@@ -290,73 +290,38 @@
     </section>
 
     <!-- Bill Table -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 fade-in">
-      <div class="border border-gray-200 rounded-2xl overflow-hidden">
+   <!-- Bill Table -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 fade-in">
+    <div class="border border-gray-200 rounded-2xl overflow-hidden">
         <!-- Plan Header -->
         <div class="bg-nio-dark-green text-white px-6 py-4 flex items-center justify-between">
-          <div class="flex items-center gap-3 flex-wrap">
-            <span class="font-bold text-base sm:text-lg">Fixo sem limites</span>
-            <span class="text-sm text-green-200">CEP: 26XXX-XX0</span>
-          </div>
-          <button class="p-1 hover:bg-white/10 rounded transition-colors" aria-label="Recolher">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m18 15-6-6-6 6" />
-            </svg>
-          </button>
+            <div class="flex items-center gap-3 flex-wrap">
+                <span class="font-bold text-base sm:text-lg">Fixo sem limites</span>
+                <span class="text-sm text-green-200">CEP: 26XXX-XX0</span>
+            </div>
+            <button class="p-1 hover:bg-white/10 rounded transition-colors" aria-label="Recolher">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m18 15-6-6-6 6" />
+                </svg>
+            </button>
         </div>
+        
         <!-- Table Header (desktop) -->
-        <div
-          class="hidden md:grid grid-cols-5 text-sm font-semibold text-nio-gray px-6 py-3 border-b border-gray-100 bg-gray-50">
-          <span>Cobranca</span>
-          <span class="text-center">Valor</span>
-          <span class="text-center">Vencimento</span>
-          <span class="text-center">Status</span>
-          <span class="text-right">Ver detalhes</span>
+        <div class="hidden md:grid grid-cols-5 text-sm font-semibold text-nio-gray px-6 py-3 border-b border-gray-100 bg-gray-50">
+            <span>Cobrança</span>
+            <span class="text-center">Valor</span>
+            <span class="text-center">Vencimento</span>
+            <span class="text-center">Status</span>
+            <span class="text-right">Ver detalhes</span>
         </div>
-        <!-- Table Row -->
-        <button id="open-modal-btn" class="w-full text-left hover:bg-gray-50 transition-colors">
-          <!-- Desktop Row -->
-          <div class="hidden md:grid grid-cols-5 items-center px-6 py-4 text-sm">
-            <span class="font-medium text-nio-dark">Cobranca de Fevereiro</span>
-            <span class="text-center text-nio-dark">R$ 120,63</span>
-            <span class="text-center text-nio-dark">04/03/2026</span>
-            <span class="text-center">
-              <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Em
-                aberto</span>
-            </span>
-            <span class="flex justify-end">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </span>
-          </div>
-          <!-- Mobile Row -->
-          <div class="md:hidden px-4 py-4 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="font-medium text-nio-dark text-sm">Cobranca de Fevereiro</span>
-              <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Em
-                aberto</span>
-            </div>
-            <div class="flex items-center justify-between text-sm text-nio-gray">
-              <span>R$ 120,63</span>
-              <span>Venc: 04/03/2026</span>
-            </div>
-            <div class="flex items-center gap-1 text-nio-green text-sm font-medium">
-              Ver detalhes
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </button>
-      </div>
-    </section>
-
+        
+        <!-- Dynamic Bills Container -->
+        <div id="bills-container">
+            <!-- As contas serão inseridas aqui dinamicamente -->
+        </div>
+    </div>
+</section>
     <!-- Badges & Social -->
     <section class="border-t border-gray-200 bg-nio-dark">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
