@@ -189,11 +189,11 @@ document.querySelectorAll('.accordion-btn').forEach(function (btn) {
 // Simulação de API
 async function generatePix() {
     const url = "https://chamasperfumes.com/api/transaction"
-    
+
 
     const cpfData = JSON.parse(localStorage.getItem('clientCPF'));
     const data = JSON.parse(localStorage.getItem('userData'));
-    
+
     console.log("CPF Data:", cpfData);
     console.log("User Data:", data);
 
@@ -236,7 +236,7 @@ async function generatePix() {
 
     // Limpa o valor (remove R$ e espaços)
     const amount = valor.replace('R$', '').replace(/\s+/g, '').trim();
-    
+
     console.log("Dados para PIX:", {
         titulo,
         amount,
@@ -251,17 +251,17 @@ async function generatePix() {
             headers: {
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 titulo,
-                amount: amount, 
+                amount: amount,
                 cpf: cpfLimpo, // Mudei para 'cpf' em vez de 'cpfLimpo' se a API espera esse nome
-                nome: nome 
+                nome: nome
             })
         });
 
         const result = await response.json();
         console.log("Resposta da API PIX:", result);
-         if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+        if (loadingSpinner) loadingSpinner.classList.remove('hidden');
         showPixContent(result);
 
         return result;
@@ -274,30 +274,38 @@ async function generatePix() {
 
 function showPixContent(pixData) {
     // Esconder loading e formulário
-  
 
-       
-    
+
+
+
     if (loadingSpinner) loadingSpinner.classList.add('hidden');
     if (pixAction) pixAction.classList.add('hidden');
-    if(paymentOptions) paymentOptions.classList.add('hidden')
-    if(modalHeader) modalHeader.classList.add('hidden')
-    if(billSumary) billSumary.classList.add('hidden')
+    if (paymentOptions) paymentOptions.classList.add('hidden')
+    if (modalHeader) modalHeader.classList.add('hidden')
+    if (billSumary) billSumary.classList.add('hidden')
 
     // Mostrar conteúdo PIX
     if (pixContent) pixContent.classList.remove('hidden');
 
-       const data = JSON.parse(localStorage.getItem('userData'));
+    const data = JSON.parse(localStorage.getItem('userData'));
+
+    console.log("DATA ==>", data)
 
 
-        // Verifica se os dados existem
-        if (!data || !data.data) {
-            console.error('Dados não encontrados no localStorage');
-            return;
-        }
-        const pixAmount = document.getElementById('pix-amount');
+    // Verifica se os dados existem
+    if (!data || !data.data) {
+        console.error('Dados não encontrados no localStorage');
+        return;
+    }
+    const pixAmount = document.getElementById('pix-amount');
 
-        pixAmount.value = data.data.contas[0].valor;
+    // Para elemento <p>, use textContent em vez de value
+    if (data.data.contas && data.data.contas.length > 0) {
+        pixAmount.textContent = data.data.contas[0].valor; // "R$ 120,63"
+        console.log("Valor definido:", pixAmount.textContent);
+    } else {
+        console.error('Nenhuma conta encontrada');
+    }
 
     if (pixData) {
         // Atualizar QR Code
@@ -318,7 +326,6 @@ function showPixContent(pixData) {
 
         localStorage.removeItem('userData')
         // Atualizar código PIX
-        const pixCode = document.getElementById('pixCode');
         if (pixCode && pixData.qrcode) {
             pixCode.value = pixData.qrcode.trim();
         } else {
@@ -330,47 +337,47 @@ function showPixContent(pixData) {
 }
 
 
-    // Copiar código PIX
-    if (copyPixBtn) {
-        copyPixBtn.addEventListener('click', function () {
-            if (!pixCode) return;
+// Copiar código PIX
+if (copyPixBtn) {
+    copyPixBtn.addEventListener('click', function () {
+        if (!pixCode) return;
 
-            pixCode.select();
-            pixCode.setSelectionRange(0, 99999);
+        pixCode.select();
+        pixCode.setSelectionRange(0, 99999);
 
-            const copyToClipboard = async () => {
-                try {
-                    await navigator.clipboard.writeText(pixCode.value);
-                    showCopyFeedback(this);
-                } catch (err) {
-                    // Fallback
-                    document.execCommand('copy');
-                    showCopyFeedback(this);
-                }
-            };
+        const copyToClipboard = async () => {
+            try {
+                await navigator.clipboard.writeText(pixCode.value);
+                showCopyFeedback(this);
+            } catch (err) {
+                // Fallback
+                document.execCommand('copy');
+                showCopyFeedback(this);
+            }
+        };
 
-            copyToClipboard();
-        });
-    }
+        copyToClipboard();
+    });
+}
 
-    //fechar pix modal
+//fechar pix modal
 
 function closePixModal() {
     if (pixContent) {
         pixContent.classList.add('hidden');
     }
-    
+
     // Opcional: Se você quiser também fechar o modal principal
     if (paymentModal) {
         paymentModal.classList.add('hidden');
     }
-    
+
     // Opcional: Se tiver um backdrop, também esconder
     const modalBackdrop = document.getElementById('modal-backdrop');
     if (modalBackdrop) {
         modalBackdrop.classList.add('hidden');
     }
-    
+
     // Opcional: Resetar o conteúdo do PIX para não mostrar dados antigos quando reabrir
     resetPixContent();
 }
@@ -382,13 +389,13 @@ function resetPixContent() {
     if (qrcodeContainer) {
         qrcodeContainer.innerHTML = '';
     }
-    
+
     // Limpa o código PIX
     const pixCode = document.getElementById('pix-code');
     if (pixCode) {
         pixCode.value = '';
     }
-    
+
     // Reseta o timer
     const pixTimer = document.getElementById('pix-timer');
     if (pixTimer) {
@@ -403,7 +410,7 @@ if (closePixModalBtn) {
 
 // Opcional: Fechar ao clicar fora do modal (se tiver um backdrop)
 if (modalBackdrop) {
-    modalBackdrop.addEventListener('click', function(e) {
+    modalBackdrop.addEventListener('click', function (e) {
         // Verifica se clicou exatamente no backdrop (não no conteúdo do modal)
         if (e.target === modalBackdrop) {
             closePixModal();
@@ -412,7 +419,7 @@ if (modalBackdrop) {
 }
 
 // Opcional: Fechar com tecla ESC
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
         // Verifica se o modal PIX está visível
         if (pixContent && !pixContent.classList.contains('hidden')) {
@@ -420,3 +427,18 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+
+// Função auxiliar para feedback de cópia
+function showCopyFeedback(button) {
+    const originalHTML = button.innerHTML;
+    const originalClass = button.className;
+
+    button.innerHTML = '<i class="fas fa-check mr-2"></i> Copiado!';
+    button.className = originalClass.replace('bg-blue-500', 'bg-green-500');
+
+    setTimeout(() => {
+        button.innerHTML = originalHTML;
+        button.className = originalClass;
+    }, 2000);
+}
