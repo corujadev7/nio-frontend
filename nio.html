@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nio - Segunda via de Conta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+    <link rel="icon" sizes="32x32" href="https://www.niointernet.com.br/data/files/D5/65/99/C6/12D67910CFEFB679107B08A8/favicon-32x32.png" type="image/png">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            nio: {
+              green: '#00c853',
+              'dark-green': '#006b2d',
+              sage: '#d4e8d0',
+              dark: '#1a1a1a',
+              gray: '#6b6b6b',
+              'light-gray': '#f5f5f5',
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-overlay {
+      animation: overlayIn 0.25s ease;
+    }
+
+    @keyframes overlayIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      background: #00c853;
+      opacity: 0.7;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    .footer-link {
+      color: #d4e8d0;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: #00c853;
+    }
+
+    .footer-heading {
+      color: #00c853;
+      font-weight: 700;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid #444;
+      color: #fff;
+      transition: all 0.2s;
+    }
+
+    .social-icon:hover {
+      border-color: #00c853;
+      color: #00c853;
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .accordion-content.open {
+      max-height: 200px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50  border-b border-gray-100" style="background-color: #192B1C;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="#" class="flex-shrink-0" aria-label="Nio Home">
+        <img src="./images/default-logo.svg" alt="" srcset="">
+      </a>
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a href="tel:08000310453"
+          class="hidden sm:flex items-center gap-2 border border-gray-300 rounded-full px-4 py-2 text-sm font-semibold text-nio-green hover:border-nio-green transition-colors">
+          Compre pelo 0800 031 0453
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+        </a>
+        <button
+          class="flex items-center gap-2 text-sm font-semibold text-nio-green hover:text-nio-green transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+          Ajuda
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LANDING VIEW -->
+  <main id="landing-view">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-nio-sage/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12">
+          <!-- Left Content -->
+          <div class="lg:max-w-lg">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-nio-dark leading-tight text-balance">Segunda
+              via de Conta</h1>
+            <p class="mt-4 text-base sm:text-lg text-nio-gray leading-relaxed">
+              Acesse sua conta resumida com Codigo de Barras de forma facil e rapida.
+            </p>
+          </div>
+          <!-- Right Card -->
+          <div class="relative z-10 w-full lg:max-w-md bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+            <div class="flex items-center gap-3 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M7 7h.01" />
+                <path d="M17 7h.01" />
+                <path d="M7 17h.01" />
+                <path d="M17 17h.01" />
+              </svg>
+              <span class="font-semibold text-nio-dark">Acesso rapido</span>
+            </div>
+            <label for="cpf-input" class="block text-sm text-nio-gray mb-2">Digite o CPF ou CNPJ da conta e pegue sua
+              segunda via</label>
+            <form id="cpf-form" class="relative">
+              <input id="cpf-input" type="text" placeholder="11673039707" maxlength="18"
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 text-nio-dark text-base focus:border-nio-green focus:ring-2 focus:ring-nio-green/20 transition-colors" />
+              <button type="submit"
+                class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-lg bg-nio-green text-white hover:bg-nio-dark-green transition-colors"
+                aria-label="Buscar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Decorative Blobs -->
+      <div class="hero-blob w-32 h-32 sm:w-48 sm:h-48 top-8 right-[30%] hidden lg:block"></div>
+      <div class="hero-blob w-20 h-20 sm:w-28 sm:h-28 top-16 right-[22%] hidden lg:block" style="opacity:0.5"></div>
+    </section>
+
+    <!-- Email / WhatsApp Section -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+          <!-- Illustration -->
+          <div class="w-full max-w-sm lg:max-w-md flex-shrink-0">
+            <img src="./images/email-whatsapp-illustration.jpg" alt="Ilustracao de receber conta por email e WhatsApp"
+              class="w-full h-auto rounded-xl" />
+          </div>
+          <!-- Text -->
+          <div class="flex-1">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-nio-dark leading-tight text-balance">
+              Receba a sua conta por e-mail e Whatsapp todo mes
+            </h2>
+            <p class="mt-4 text-base sm:text-lg text-nio-gray leading-relaxed max-w-xl">
+              Tenha mais praticidade e seguranca, receba suas contas sem risco de atrasos e acesse de onde estiver.
+            </p>
+            <a href="#"
+              class="mt-6 inline-flex items-center gap-3 border-2 border-gray-200 rounded-full px-8 py-3 text-sm font-semibold text-nio-dark hover:border-nio-green hover:text-nio-green transition-colors group">
+              Eu quero
+              <span
+                class="w-8 h-8 flex items-center justify-center rounded-full bg-nio-green text-white group-hover:bg-nio-dark-green transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- RESULTS VIEW (hidden by default) -->
+  <main id="results-view" class="hidden">
+    <!-- User Greeting -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <p class="text-sm text-nio-gray">CPF: <span id="hideCPF"></span></p>
+          <h2 class="mt-1 text-xl sm:text-2xl md:text-3xl font-bold text-nio-dark">
+            Ola <span id="clientName"></span>, voce tem <span class="font-extrabold">1 conta</span> pra pagar
+          </h2>
+        </div>
+        <button id="new-search-btn"
+          class="inline-flex items-center gap-2 bg-nio-dark text-white rounded-full px-6 py-3 text-sm font-semibold hover:bg-gray-800 transition-colors self-start sm:self-auto">
+          Nova pesquisa
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Bill Table -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 fade-in">
+      <div class="border border-gray-200 rounded-2xl overflow-hidden">
+        <!-- Plan Header -->
+        <div class="bg-nio-dark-green text-white px-6 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-3 flex-wrap">
+            <span class="font-bold text-base sm:text-lg">Fixo sem limites</span>
+            <span class="text-sm text-green-200">CEP: 26XXX-XX0</span>
+          </div>
+          <button class="p-1 hover:bg-white/10 rounded transition-colors" aria-label="Recolher">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m18 15-6-6-6 6" />
+            </svg>
+          </button>
+        </div>
+        <!-- Table Header (desktop) -->
+        <div
+          class="hidden md:grid grid-cols-5 text-sm font-semibold text-nio-gray px-6 py-3 border-b border-gray-100 bg-gray-50">
+          <span>Cobranca</span>
+          <span class="text-center">Valor</span>
+          <span class="text-center">Vencimento</span>
+          <span class="text-center">Status</span>
+          <span class="text-right">Ver detalhes</span>
+        </div>
+        <!-- Table Row -->
+        <button id="open-modal-btn" class="w-full text-left hover:bg-gray-50 transition-colors">
+          <!-- Desktop Row -->
+          <div class="hidden md:grid grid-cols-5 items-center px-6 py-4 text-sm">
+            <span class="font-medium text-nio-dark">Cobranca de Fevereiro</span>
+            <span class="text-center text-nio-dark">R$ 120,63</span>
+            <span class="text-center text-nio-dark">04/03/2026</span>
+            <span class="text-center">
+              <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Em
+                aberto</span>
+            </span>
+            <span class="flex justify-end">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+          </div>
+          <!-- Mobile Row -->
+          <div class="md:hidden px-4 py-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-medium text-nio-dark text-sm">Cobranca de Fevereiro</span>
+              <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Em
+                aberto</span>
+            </div>
+            <div class="flex items-center justify-between text-sm text-nio-gray">
+              <span>R$ 120,63</span>
+              <span>Venc: 04/03/2026</span>
+            </div>
+            <div class="flex items-center gap-1 text-nio-green text-sm font-medium">
+              Ver detalhes
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <!-- Badges & Social -->
+    <section class="border-t border-gray-200 bg-nio-dark">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+          <!-- Badges -->
+          <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-full bg-nio-green/20 flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="#00c853" stroke-width="2" />
+                  <path d="M8 12l3 3 5-5" stroke="#00c853" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-[10px] font-bold text-white tracking-wider uppercase">OpenSignal</p>
+                <p class="text-[9px] text-green-300 font-semibold">Confiabilidade 2025</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-full bg-nio-green/20 flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="#00c853" stroke-width="2" />
+                  <path d="M12 6v12M6 12h12" stroke="#00c853" stroke-width="2" stroke-linecap="round" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-[10px] font-bold text-white tracking-wider uppercase">OpenSignal</p>
+                <p class="text-[9px] text-green-300 font-semibold">Estabilidade 2025</p>
+              </div>
+            </div>
+          </div>
+          <!-- Social Icons -->
+          <div class="flex items-center gap-3">
+            <a href="#" class="social-icon" aria-label="Facebook">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Instagram">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect width="20" height="20" x="2" y="2" rx="5" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="LinkedIn">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                <rect width="4" height="12" x="2" y="9" />
+                <circle cx="4" cy="4" r="2" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="TikTok">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="X / Twitter">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="YouTube">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+                <polygon fill="#1a1a1a" points="9.75,15.02 15.5,11.75 9.75,8.48" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-nio-dark text-white border-t border-gray-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8">
+          <!-- Col 1 -->
+          <div>
+            <h3 class="footer-heading">Produtos e servicos</h3>
+            <nav class="flex flex-col gap-2">
+              <a href="#" class="footer-link">Nio Fibra pra casa</a>
+              <a href="#" class="footer-link">Nio Fibra pra empresa</a>
+              <a href="#" class="footer-link">Internet com Streaming</a>
+              <a href="#" class="footer-link">Internet Gamer</a>
+              <a href="#" class="footer-link">Internet para Home Office</a>
+              <a href="#" class="footer-link">Wi-Fi 6</a>
+              <a href="#" class="footer-link">Beneficios</a>
+              <a href="#" class="footer-link">Casa Inteligente</a>
+              <a href="#" class="footer-link">Cobertura</a>
+              <a href="#" class="footer-link">Teste de Velocidade</a>
+            </nav>
+          </div>
+          <!-- Col 2 -->
+          <div>
+            <h3 class="footer-heading">Ajuda</h3>
+            <nav class="flex flex-col gap-2">
+              <a href="#" class="footer-link">Servicos</a>
+              <a href="#" class="footer-link">Segunda via de conta</a>
+              <a href="#" class="footer-link">Negociar dividas</a>
+              <a href="#" class="footer-link">Desbloquear servico</a>
+              <a href="#" class="footer-link">Mudar plano</a>
+              <a href="#" class="footer-link">Suporte tecnico</a>
+              <a href="#" class="footer-link">Cancelamento</a>
+              <a href="#" class="footer-link">Central de ajuda</a>
+            </nav>
+          </div>
+          <!-- Col 3 -->
+          <div>
+            <h3 class="footer-heading">Canais de atendimento</h3>
+            <nav class="flex flex-col gap-2">
+              <div>
+                <a href="#" class="footer-link">WhatsApp</a>
+                <p class="text-xs text-gray-500 mt-0.5">21 3605 1000</p>
+              </div>
+              <div>
+                <a href="#" class="footer-link">Atendimento</a>
+                <p class="text-xs text-gray-500 mt-0.5">0800 001 1000</p>
+              </div>
+              <div>
+                <a href="#" class="footer-link">Assinar pra casa</a>
+                <p class="text-xs text-gray-500 mt-0.5">0800 031 0453</p>
+              </div>
+              <div>
+                <a href="#" class="footer-link">Assinar pra empresa</a>
+                <p class="text-xs text-gray-500 mt-0.5">0800 282 3258</p>
+              </div>
+              <a href="#" class="footer-link">Deficientes auditivos</a>
+              <a href="#" class="footer-link">Ouvidoria</a>
+            </nav>
+          </div>
+          <!-- Col 4 -->
+          <div>
+            <h3 class="footer-heading">Institucional</h3>
+            <nav class="flex flex-col gap-2">
+              <a href="#" class="footer-link">Sobre a Nio</a>
+              <a href="#" class="footer-link">Trabalhe conosco</a>
+              <a href="#" class="footer-link">Imprensa</a>
+              <a href="#" class="footer-link">Seja parceiro</a>
+              <a href="#" class="footer-link">Confiabilidade</a>
+            </nav>
+          </div>
+          <!-- Col 5 -->
+          <div>
+            <h3 class="footer-heading">Transparencia</h3>
+            <nav class="flex flex-col gap-2">
+              <a href="#" class="footer-link">Termos e contratos</a>
+              <a href="#" class="footer-link">Privacidade</a>
+              <a href="#" class="footer-link">Comunicados</a>
+              <a href="#" class="footer-link">Regulatorio</a>
+              <a href="#" class="footer-link">Seguranca</a>
+              <a href="#" class="footer-link">Acessibilidade</a>
+              <a href="#" class="footer-link">Etica e integridade</a>
+              <a href="#" class="footer-link">Conselho de usuarios</a>
+              <a href="#" class="footer-link">Repositorio de ofertas</a>
+              <a href="#" class="footer-link">Devolucao de credito ex-cliente</a>
+              <a href="#" class="footer-link">Interrupcao de servicos</a>
+            </nav>
+          </div>
+          <!-- Col 6 - Fique por dentro -->
+          <div>
+            <h3 class="footer-heading">Fique por dentro</h3>
+            <div class="space-y-3">
+              <button
+                class="accordion-btn w-full text-left flex items-center justify-between text-sm text-gray-300 hover:text-white transition-colors"
+                data-target="acc-1">
+                <span class="pr-2">O telemarketing da Nio e feito apenas pelo prefixo 0303</span>
+                <svg class="flex-shrink-0 w-5 h-5 transition-transform" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
+                </svg>
+              </button>
+              <div id="acc-1" class="accordion-content text-xs text-gray-500 leading-relaxed"></div>
+              <button
+                class="accordion-btn w-full text-left flex items-center justify-between text-sm text-gray-300 hover:text-white transition-colors"
+                data-target="acc-2">
+                <span class="pr-2">Saiba como bloquear ligacoes indesejadas no seu telefone</span>
+                <svg class="flex-shrink-0 w-5 h-5 transition-transform" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
+                </svg>
+              </button>
+              <div id="acc-2" class="accordion-content text-xs text-gray-500 leading-relaxed"></div>
+              <button
+                class="accordion-btn w-full text-left flex items-center justify-between text-sm text-gray-300 hover:text-white transition-colors"
+                data-target="acc-3">
+                <span class="pr-2">Participe da pesquisa de satisfacao da Anatel</span>
+                <svg class="flex-shrink-0 w-5 h-5 transition-transform" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
+                </svg>
+              </button>
+              <div id="acc-3" class="accordion-content text-xs text-gray-500 leading-relaxed"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom Bar -->
+      <div class="border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <!-- Nio Logo White -->
+              <svg width="56" height="24" viewBox="0 0 72 32" fill="none">
+                <text x="0" y="26" font-family="Inter" font-weight="900" font-size="28" fill="#ffffff">n</text>
+                <text x="18" y="26" font-family="Inter" font-weight="900" font-size="28" fill="#ffffff">i</text>
+                <circle cx="24" cy="8" r="4" fill="#00c853" />
+                <text x="30" y="26" font-family="Inter" font-weight="900" font-size="28" fill="#ffffff">o</text>
+              </svg>
+              <div class="text-xs text-gray-500 leading-relaxed">
+                <p>Client Co Servicos de Rede Nordeste S.A.</p>
+                <p>Todos os direitos reservados.</p>
+              </div>
+            </div>
+            <div class="text-xs text-gray-500">
+              <p>CNPJ: 53.420.564/0001-40 | Rua Visconde de Piraja, 414 - sala 718 - Ipanema | Rio de Janeiro - RJ - CEP
+                22410-002</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <a href="#" class="text-xs text-gray-400 hover:text-white transition-colors">Seguranca</a>
+              <a href="#" class="text-xs text-gray-400 hover:text-white transition-colors">Privacidade</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- PAYMENT MODAL -->
+  <div id="payment-modal" class="hidden fixed inset-0 z-[100]">
+    <div class="modal-overlay absolute inset-0 bg-black/50" id="modal-backdrop"></div>
+    <div class="relative flex items-center justify-center min-h-full p-4">
+      <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="px-6 pt-6 pb-4 border-b border-gray-100" id="modalHeader">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3 flex-wrap">
+              <h3 class="font-bold text-lg text-nio-dark">Fixo sem limites</h3>
+              <span class="text-gray-400">|</span>
+              <span class="text-sm font-medium text-nio-dark">CEP: 26XXX-XX0</span>
+              <span class="text-sm text-nio-gray">Duvidas? Ligue: 0800 0011000</span>
+            </div>
+            <button id="close-modal-btn" class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Fechar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <!-- Bill Summary -->
+        <div class="px-6 py-4 bg-gray-50 border-b border-gray-100" id="bill-sumary">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div>
+              <p class="text-xs text-nio-gray">Cobranca</p>
+              <p class="font-semibold text-nio-dark text-sm mt-1" id="chargeMonth"></p>
+            </div>
+            <div>
+              <p class="text-xs text-nio-gray">Valor da conta</p>
+              <p class="font-semibold text-nio-dark text-sm mt-1" id="chargeValue"></p>
+            </div>
+            <div>
+              <p class="text-xs text-nio-gray">Vencimento</p>
+              <p class="font-semibold text-nio-dark text-sm mt-1" id="chargeDate"></p>
+            </div>
+            <div class="flex items-end">
+              <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full"
+                id="chargeStatus">Em aberto</span>
+            </div>
+          </div>
+        </div>
+        <!-- Payment Options -->
+        <div class="p-6" id="paymentOptions">
+          <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left: Payment Methods -->
+            <div class="flex-1">
+              <h4 class="font-bold text-lg text-nio-dark mb-4">Escolha como pagar</h4>
+              <div class="space-y-3">
+                <!-- Pix -->
+                <label
+                  class="flex items-center gap-4 border-2 border-nio-green bg-nio-green/5 rounded-xl p-4 cursor-pointer transition-all">
+                  <input type="radio" name="payment" value="pix" checked class="sr-only" />
+                  <div class="w-10 h-10 bg-nio-green/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M13.17 10.83l-2.34-2.34a2.5 2.5 0 0 0-3.54 0L4.05 11.73a2.5 2.5 0 0 0 0 3.54l3.24 3.24a2.5 2.5 0 0 0 3.54 0l2.34-2.34"
+                        stroke="#00c853" stroke-width="2" stroke-linecap="round" />
+                      <path
+                        d="M10.83 13.17l2.34 2.34a2.5 2.5 0 0 0 3.54 0l3.24-3.24a2.5 2.5 0 0 0 0-3.54l-3.24-3.24a2.5 2.5 0 0 0-3.54 0l-2.34 2.34"
+                        stroke="#00c853" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-nio-dark text-sm">Pix</p>
+                    <p class="text-xs text-nio-gray">Confirmacao em ate 3 horas</p>
+                  </div>
+                </label>
+                <!-- Boleto -->
+                <label
+                  class="flex items-center gap-4 border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-gray-300 transition-all"
+                  id="boleto-option">
+                  <input type="radio" name="payment" value="boleto" class="sr-only" />
+                  <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="2"
+                      stroke-linecap="round">
+                      <path d="M4 4v16" />
+                      <path d="M8 4v16" />
+                      <path d="M12 4v16" />
+                      <path d="M16 4v16" />
+                      <path d="M20 4v16" />
+                      <path d="M6 4v16" />
+                      <path d="M14 4v16" />
+                      <path d="M18 4v16" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-nio-dark text-sm">Boleto</p>
+                    <p class="text-xs text-nio-gray">Confirmacao em ate 1 dia util</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <!-- Right: Pix Action -->
+            <div class="flex-1 flex flex-col items-center justify-center text-center py-6 lg:py-0 " id="pixAction">
+              <div class="w-16 h-16 mb-4 text-nio-gray">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M33.17 26.83l-2.34-2.34a6 6 0 0 0-8.49 0l-7.78 7.78a6 6 0 0 0 0 8.49l7.78 7.78a6 6 0 0 0 8.49 0l2.34-2.34"
+                    stroke="#d4d4d4" stroke-width="3" stroke-linecap="round" />
+                  <path
+                    d="M30.83 37.17l2.34 2.34a6 6 0 0 0 8.49 0l7.78-7.78a6 6 0 0 0 0-8.49l-7.78-7.78a6 6 0 0 0-8.49 0l-2.34 2.34"
+                    stroke="#d4d4d4" stroke-width="3" stroke-linecap="round" />
+                </svg>
+              </div>
+              <p class="text-sm text-nio-gray max-w-xs leading-relaxed mb-6">
+                Gere o codigo Pix e pague pelo aplicativo ou site do seu banco.
+              </p>
+              <button
+                class="bg-nio-green hover:bg-nio-dark-green text-white font-semibold rounded-full px-10 py-3 text-sm transition-colors"
+                onclick="generatePix()">
+                Gerar Pix
+              </button>
+            </div>
+          </div>
+          <!-- SPINNER -->
+          <div id="loadingSpinner"
+            class="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible hidden">
+            <svg class="text-gray-300 animate-spin" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"
+              width="24" height="24">
+              <path
+                d="M32 3C35.8083 3 39.5794 3.75011 43.0978 5.20749C46.6163 6.66488 49.8132 8.80101 52.5061 11.4939C55.199 14.1868 57.3351 17.3837 58.7925 20.9022C60.2499 24.4206 61 28.1917 61 32C61 35.8083 60.2499 39.5794 58.7925 43.0978C57.3351 46.6163 55.199 49.8132 52.5061 52.5061C49.8132 55.199 46.6163 57.3351 43.0978 58.7925C39.5794 60.2499 35.8083 61 32 61C28.1917 61 24.4206 60.2499 20.9022 58.7925C17.3837 57.3351 14.1868 55.199 11.4939 52.5061C8.801 49.8132 6.66487 46.6163 5.20749 43.0978C3.7501 39.5794 3 35.8083 3 32C3 28.1917 3.75011 24.4206 5.2075 20.9022C6.66489 17.3837 8.80101 14.1868 11.4939 11.4939C14.1868 8.80099 17.3838 6.66487 20.9022 5.20749C24.4206 3.7501 28.1917 3 32 3L32 3Z"
+                stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path
+                d="M32 3C36.5778 3 41.0906 4.08374 45.1692 6.16256C49.2477 8.24138 52.7762 11.2562 55.466 14.9605C58.1558 18.6647 59.9304 22.9531 60.6448 27.4748C61.3591 31.9965 60.9928 36.6232 59.5759 40.9762"
+                stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+                class="text-gray-900">
+              </path>
+            </svg>
+          </div>
+        </div>
+        <!-- QRCODE -->
+        <div class="pix-content hidden" id="pixContent">
+          <div class="p-5 relative"> <!-- Adicione 'relative' para posicionamento absoluto do botão -->
+
+            <!-- Botão de fechar - já existe no seu código, mas vamos garantir que está no lugar certo -->
+            <button id="close-pix-modal-btn"
+              class="absolute top-2 right-2 p-2 hover:bg-gray-100 rounded-full transition-colors z-10"
+              aria-label="Fechar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+
+            <!-- Header com indicador de progresso -->
+            <div class="flex items-center gap-1 mb-3">
+              <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+              <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+              <div class="w-2 h-2 rounded-full bg-green-500"></div>
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Quase lá! Falta só pagar</h3>
+            <p class="text-sm text-gray-500 mb-4">Escaneie o QR Code ou copie e cole o código PIX</p>
+
+            <!-- Timer -->
+            <!-- <div class="bg-orange-50 rounded-xl px-4 py-3 flex items-center justify-between mb-4">
+              <span class="text-sm text-gray-700">Tempo restante para pagamento</span>
+              <span class="text-lg font-bold text-orange-500" id="pix-timer">4:55</span>
+            </div> -->
+
+            <!-- QR Code Container -->
+            <div class="flex justify-center mb-4">
+              <div class="bg-white p-3 rounded-2xl border border-gray-100">
+                <div id="qrcode-container" class="w-48 h-48 flex items-center justify-center">
+                  <!-- O JS vai preencher aqui com a img -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Valor -->
+            <div class="mb-4">
+              <p class="text-sm text-gray-500 mb-1">Valor:</p>
+              <p class="text-2xl font-bold text-gray-800" id="pix-amount">R$ 30,00</p>
+            </div>
+
+            <!-- Código PIX -->
+            <div class="mb-4">
+              <p class="text-sm text-gray-500 mb-2">Copia e cola:</p>
+              <div class="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                <div class="flex items-center gap-2">
+                  <input type="text" id="pix-code" readonly
+                    class="w-full bg-transparent text-xs font-mono text-gray-600 outline-none truncate"
+                    value="00020101021226940014br.gov.bcb.pix2572qrcode.somossimpay.com.br/v2/qr/cob/21c16154-9ff1-4096-995c-632c76c3b665520400053039865802BR5921MARKESTE AÇÕE FAZ O TRABALHADOR">
+                  <button id="copy-pix-btn"
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap hover:bg-green-600 transition-colors">
+                    Copiar código PIX
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END QRCODE -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessibility Button -->
+  <button
+    class="fixed top-24 right-0 z-40 bg-nio-dark text-white w-10 h-10 rounded-l-lg flex items-center justify-center hover:bg-gray-800 transition-colors"
+    aria-label="Acessibilidade">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="4" r="1" />
+      <path d="M7 8h10" />
+      <path d="M12 8v8" />
+      <path d="m9 20 3-4 3 4" />
+    </svg>
+  </button>
+
+  <!-- WhatsApp Button -->
+  <a href="#"
+    class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-nio-green rounded-full flex items-center justify-center shadow-lg hover:bg-nio-dark-green transition-colors group"
+    aria-label="WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+    <span
+      class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">1</span>
+  </a>
+
+
+  <!-- Modal de Loading (inicialmente escondido) -->
+  <div class="loading-modal hidden" id="loadingModal">
+    <div class="loading-modal-container flex flex-col items-center justify-center py-10">
+      <div class="spinner mb-4"></div>
+      <p class="text-xl font-semibold text-gray-800 mb-2">Buscando Faturas...</p>
+      <p class="loading-text text-gray-600 text-center">Aguarde enquanto processamos sua solicitação</p>
+      <div class="mt-6 w-full max-w-xs">
+        <div class="bg-gray-200 rounded-full h-2">
+          <div class="bg-blue-500 h-2 rounded-full progress-bar" style="width: 0%"></div>
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 mt-4">Isso pode levar alguns segundos</p>
+    </div>
+  </div>
+
+  <script src="./script/main.js"></script>
+</body>
+
+</html>
